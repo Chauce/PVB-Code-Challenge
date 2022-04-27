@@ -79,25 +79,31 @@ merged_hasharr.each do |student|
       avg = (v / n)
       student.store('avg', avg)
       # Get letter grade
-      case avg
+      letter = loop do
+        pp "Getting letter grade"
+
+        case avg
         when 90..100
-        student.store('ltr', 'A')
-      when 80..89
-         student.store('ltr', 'B')
-       when 70..79
-         student.store('ltr', 'C')
-       when 55..69
-         student.store('ltr', 'D')
-       when 0..54
-         student.store('ltr', 'F')
-       else
-         student.store('ltr', 'ERROR')
+          break 'A'
+        when 80..89
+           break 'B'
+         when 70..79
+           break 'C'
+         when 55..69
+           break 'D'
+         when 0..54
+           break 'F'
+         else
+           pp 'Could not find score'
+        end
       end
+      pp "#{student.name}'s Grade is #{letter}'"
+      student.store('grade', letter)
     end
   end
 end
 
 # Output Student Name and Letter Grade
 merged_hasharr.each do |student|
-  puts "#{student.name} #{student.ltr}\n"
+  puts "#{student.name} #{student.grade}\n"
 end
