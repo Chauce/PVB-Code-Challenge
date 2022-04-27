@@ -56,15 +56,19 @@ CSV.parse(csv_data, headers: false) do |row|
   }
   class_array << assg_hash
 end
-
+pp "class_array: #{class_array}"
 # Sort by Student ID
 sorted_hasharr = class_array.sort_by { |h| h[:id] }
+
+pp "sorted_hasharr: #{sorted_hasharr}"
 
 # Merge so your student data has total score
 merged_hasharr = sorted_hasharr.
   group_by { |h| h[:id] }.
   values.
   map { |arr| arr.reduce(&:merge) }
+
+pp "merged_hasharr: #{merged_hasharr}"
 
 # Divide sum by 3 and add (key, val) to hash
 avg = 0
