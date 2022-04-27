@@ -78,13 +78,13 @@ merged_hasharr.each do |student|
       case avg
         when 90..100
         "A"
-        when 80..90
+      when 80..89
          "B"
-        when 70..80
+       when 70..79
          "C"
-        when 60..70
+       when 55..69
          "D"
-        when 0..60
+       when 0..54
          "F"
         else
        "Error"
