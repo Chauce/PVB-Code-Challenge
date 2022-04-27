@@ -77,19 +77,18 @@ merged_hasharr.each do |student|
       # Get letter grade
       case avg
         when 90..100
-        "A"
+        student.store('ltr', 'A')
       when 80..89
-         "B"
+         student.store('ltr', 'B')
        when 70..79
-         "C"
+         student.store('ltr', 'C')
        when 55..69
-         "D"
+         student.store('ltr', 'D')
        when 0..54
-         "F"
-        else
-       "Error"
+         student.store('ltr', 'F')
+       else
+         student.store('ltr', 'ERROR')
       end
-      student.store('ltr', case)
     end
   end
 end
