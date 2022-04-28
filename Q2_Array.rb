@@ -72,7 +72,33 @@ if File.exists?(filename) && File.readable?(filename) then
   # end
   # pp " CSV has int scores: #{scores_arr}"
 
-  
+  # Create Array of Hashes from CSV
+  CSV.parse(in_file, headers: false) do |row|
+    assg_hash = {
+      name: row[0],
+      id: row[1],
+      #assignment: row[2],
+      score: row[3].to_i,
+    }
+    class_array << assg_hash
+  end
+  pp "class_array: #{class_array}"
+  # Sort by Student ID
+  sorted_hasharr = class_array.sort_by { |h| h[:id] }
+
+  pp "sorted_hasharr: #{sorted_hasharr}"
+
+  # Merge so your student data has total score
+  merged_hasharr = sorted_hasharr.
+    group_by { |h| h[:id] }.
+    values.
+    map { |arr| arr.
+      inject{|memo, el| memo.
+        merge( el ){|k, old_v, new_v| old_v + new_v}
+      }
+    }
+
+  pp "merged_hasharr: #{merged_hasharr}"
 
   # Create individual arrays for students, summing together scores
   #sum_arr = scores_arr.group_by(&:first).map {|name, score| [name, score.sum(&:last)] }
