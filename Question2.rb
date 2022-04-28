@@ -39,15 +39,19 @@
 
 require 'csv'
 
+filename = ""
+in_file = nil
+class_array = []
+
 # Read in file from terminal
 puts "Chasya Church -- Student Grade Calculation"
 puts "Enter the CSV file path:"
-csv_data = gets.chomp
+filename = gets.chomp
 
-class_array = []
+in_file = File.open(filename, "r")
 
 # Create Array of Hashes from CSV
-CSV.parse(csv_data, headers: false) do |row|
+CSV.parse(in_file, headers: false) do |row|
   assg_hash = {
     name: row[0],
     id: row[1],
