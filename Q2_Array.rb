@@ -48,15 +48,35 @@ puts "Chasya Church -- Student Grade Calculation"
 puts "Enter the CSV file path:"
 filename = gets.chomp
 if File.exists?(filename) && File.readable?(filename) then
-  # Create Array of Arrays from CSV
-  rows = CSV.open(filename).each.to_a
+  in_file = File.open(filename, "r")
+  # # Create Array of Arrays from CSV
+  # rows = CSV.open(filename).each.to_a
+  #
+  # pp "All CSV info: #{rows}"
+  # # Sort by Student ID
+  # sorted_arr = rows.sort_by { |s_id| s_id[1] }
+  # pp "Sorted CSV info: #{sorted_arr}"
+  # # Turn scores into integers
+  # scores_arr = sorted_arr.map { |scores| scores[3].to_i}
+  # pp "scores_arr is: #{scores_arr}"
+  # pp "sorted_arr is: #{sorted_arr}"
+  #
+  # sorted_arr.each do |student|
+  #   student.each do |value|
+  #     pp "student is #{student} and value is #{value}" #<< scores_arr[s][v]
+  #
+  #     pp "student[3] is #{student[3]}" #<< scores_arr[s][v]
+  #     if value.is_integer?
+  #       sorted_arr[3]
+  #   end
+  # end
+  # pp " CSV has int scores: #{scores_arr}"
 
-   pp "All CSV info: #{rows}"
-   # Sort by Student ID
-   sorted_arr = rows.sort_by { |s_id| s_id[1] }
-   pp "Sorted CSV info: #{sorted_arr}"
-   # Create individual arrays for students
-   # copy a[1, 2] to new array[1,2]
+  
+
+  # Create individual arrays for students, summing together scores
+  #sum_arr = scores_arr.group_by(&:first).map {|name, score| [name, score.sum(&:last)] }
+  #pp "Each student should have their own array: #{sum_arr}"
 
    # While a[2] == b[2], sum+= a,b,c[4]
    # Divide sum by 3

@@ -55,7 +55,7 @@ CSV.parse(in_file, headers: false) do |row|
   assg_hash = {
     name: row[0],
     id: row[1],
-    #assignment: row[2],
+    assignment: row[2],
     score: row[3].to_i,
   }
   class_array << assg_hash
