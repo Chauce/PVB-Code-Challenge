@@ -64,7 +64,7 @@ def csv_to_array(csvfile)
   filename = ""
   in_file = nil
   class_array = []
-  
+
   CSV.parse(csvfile, headers: false) do |row|
     assg_hash = {
       name: row[0],
@@ -77,10 +77,27 @@ def csv_to_array(csvfile)
   return class_array
 end
 
+# Sort by Student ID
+def sort_hasharr_by_student_id(unsorted_hasharr)
+  sorted_hasharr = unsorted_hasharr.sort_by { |h| h[:id] }
+  return sorted_hasharr
+end
+
+# Merge all info by student, calculate avg based on total of assignments
+# (assg_tot), assign letter grade for average
+def merge_student_info(sorted_hasharr)
+  merged_hasharr = sorted_hasharr.each_with_object(Hash.new(0)) { |hsh, e| e[hsh[:name]] += hsh[:score].to_f }.
+    sort_by { |_, v| -v }.
+    map.
+    with_index { |(k, v), i| [{ :student => k, :total => v, :avg => (v/3), :letter => (letter_grade(v))}] }
+  return merged_hasharr
+end
+
 # Read in file from terminal
 puts "Chasya Church -- Student Grade Calculation"
 puts "Enter the CSV file path:"
 filename = gets.chomp
+
 if File.exists?(filename) && File.readable?(filename) then
   in_file = File.open(filename, "r")
 
@@ -90,14 +107,13 @@ if File.exists?(filename) && File.readable?(filename) then
   pp "class_array: #{class_array}"
 
   # Sort by Student ID
-  sorted_hasharr = class_array.sort_by { |h| h[:id] }
+  sorted_hasharr = sort_hasharr_by_student_id(class_array)
 
   pp "sorted_hasharr: #{sorted_hasharr}"
 
-  merged_hasharr = sorted_hasharr.each_with_object(Hash.new(0)) { |hsh, e| e[hsh[:name]] += hsh[:score].to_f }.
-    sort_by { |_, v| -v }.
-    map.
-    with_index { |(k, v), i| [{ :student => k, :total => v, :avg => (v/3), :letter => (letter_grade(v))}] }
+  # Merge all info by student, calculate avg based on total of assignments
+  # (assg_tot), assign letter grade for average
+  merged_hasharr = merge_student_info(sorted_hasharr)
   pp "merged_hasharr: #{merged_hasharr}"
 
   else
