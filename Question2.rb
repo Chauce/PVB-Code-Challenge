@@ -95,7 +95,7 @@ end
 
 # Print student names and letter grades
 def final_printout(complete_hasharr)
-  puts "Students' Letter Grades:"
+  puts "\n\nStudents' Letter Grades:"
   complete_hasharr.each do |arr|
     #pp "arr: #{arr}"
     arr.each do |in_arr|
