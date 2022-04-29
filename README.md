@@ -8,6 +8,7 @@ When asked for CSV, you should be able to run the CSV file provided in the PVB-C
 class.csv
 
 Expected Output:
+
 `Chasya Church -- Student Grade Calculation
 
 PROTIP: If you downloaded the PVB CODE CHALLENGE folder,
