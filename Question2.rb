@@ -39,75 +39,113 @@
 
 require 'csv'
 
-filename = ""
-in_file = nil
-class_array = []
-
-# Read in file from terminal
-puts "Chasya Church -- Student Grade Calculation"
-puts "Enter the CSV file path:"
-filename = gets.chomp
-
-in_file = File.open(filename, "r")
+def letter_grade(total)
+  avg = (total / 3)
+  #puts "We got #{avg}"
+  letter = case avg
+  when 90..100
+     'A'
+  when 80..90
+      'B'
+   when 70..80
+      'C'
+   when 55..70
+      'D'
+   when 0..55
+      'F'
+   else
+     pp 'Could not find score'
+  end
+  return letter
+end
 
 # Create Array of Hashes from CSV
-CSV.parse(in_file, headers: false) do |row|
-  assg_hash = {
-    name: row[0],
-    id: row[1],
-    assignment: row[2],
-    score: row[3].to_i,
-  }
-  class_array << assg_hash
+def csv_to_array(csvfile)
+  filename = ""
+  in_file = nil
+  class_array = []
+
+  CSV.parse(csvfile, headers: false) do |row|
+    assg_hash = {
+      name: row[0],
+      id: row[1],
+      #assignment: row[2],
+      score: row[3].to_i,
+    }
+    class_array << assg_hash
+  end
+  return class_array
 end
-pp "class_array: #{class_array}"
+
 # Sort by Student ID
-sorted_hasharr = class_array.sort_by { |h| h[:id] }
+def sort_hasharr_by_student_id(unsorted_hasharr)
+  sorted_hasharr = unsorted_hasharr.sort_by { |h| h[:id] }
+  return sorted_hasharr
+end
 
-pp "sorted_hasharr: #{sorted_hasharr}"
+# Merge all info by student, calculate avg based on total of assignments
+# (assg_tot), assign letter grade for average
+def merge_student_info(sorted_hasharr, assg_tot)
+  merged_hasharr = sorted_hasharr.each_with_object(Hash.new(0)) { |hsh, e| e[hsh[:name]] += hsh[:score].to_f }.
+    #sort_by { |_, v| -v }.
+    map.
+    with_index { |(k, v), i| [{ :student => k, :total => v, :avg => (v/assg_tot), :letter => (letter_grade(v))}] }
+  return merged_hasharr
+end
 
-# Merge so your student data has total score
-merged_hasharr = sorted_hasharr.
-  group_by { |h| h[:id] }.
-  values.
-  map { |arr| arr.reduce(&:merge) }
-
-pp "merged_hasharr: #{merged_hasharr}"
-
-# Divide sum by 3 and add (key, val) to hash
-avg = 0
-n = 3 # Number of Assignments
-merged_hasharr.each do |student|
-  student.each do |k, v|
-    if v.is_a? Integer
-      avg = (v / n)
-      student.store('avg', avg)
-      # Get letter grade
-      letter = loop do
-        pp "Getting letter grade"
-
-        case avg
-        when 90..100
-          break 'A'
-        when 80..89
-           break 'B'
-         when 70..79
-           break 'C'
-         when 55..69
-           break 'D'
-         when 0..54
-           break 'F'
-         else
-           pp 'Could not find score'
+# Print student names and letter grades
+def final_printout(complete_hasharr)
+  puts "\n\nStudents' Letter Grades:"
+  complete_hasharr.each do |arr|
+    #pp "arr: #{arr}"
+    arr.each do |in_arr|
+      #pp "internal array: #{in_arr}"
+      in_arr.each do |key, val|
+        #pp "key is: #{key}"
+        #pp "value is: #{val}"
+        if key == :student
+          print "#{val} "
+        elsif key == :letter
+          print "#{val}"
         end
       end
-      pp "#{student.name}'s Grade is #{letter}'"
-      student.store('grade', letter)
+      print "\n"
     end
   end
 end
 
-# Output Student Name and Letter Grade
-merged_hasharr.each do |student|
-  puts "#{student.name} #{student.grade}\n"
+# Read in file from terminal
+puts "Chasya Church -- Student Grade Calculation"
+puts "\nPROTIP: If you downloaded the PVB CODE CHALLENGE folder,
+      the input file should be <class.csv>"
+puts "\nEnter the CSV file path:"
+filename = gets.chomp
+
+# Run program if file path is valid
+if File.exists?(filename) && File.readable?(filename) then
+  in_file = File.open(filename, "r")
+
+  # Create Array of Hashes from CSV
+  class_array = csv_to_array(in_file)
+
+  #pp "class_array: #{class_array}"
+
+  # Sort by Student ID
+  sorted_hasharr = sort_hasharr_by_student_id(class_array)
+
+  #pp "sorted_hasharr: #{sorted_hasharr}"
+
+  # Merge all info by student, calculate avg based on total of assignments
+  # (assg_tot), assign letter grade for average
+  merged_hasharr = merge_student_info(sorted_hasharr, 3)
+  #pp "merged_hasharr: #{merged_hasharr}"
+
+  # Print student names and letter grades
+  final_printout(merged_hasharr)
+
+  # If file path is not valid, print message and quit
+  else
+    puts "#{filename} does not exist or is not readable."
 end
+
+puts "\nProgram Complete -- GOODBYE! :)"
