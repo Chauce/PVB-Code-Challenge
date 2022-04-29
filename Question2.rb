@@ -41,7 +41,7 @@ require 'csv'
 
 def letter_grade(total)
   avg = (total / 3)
-  puts "We got #{avg}"
+  #puts "We got #{avg}"
   letter = case avg
   when 90..100
      'A'
@@ -116,7 +116,9 @@ end
 
 # Read in file from terminal
 puts "Chasya Church -- Student Grade Calculation"
-puts "Enter the CSV file path:"
+puts "\nPROTIP: If you downloaded the PVB CODE CHALLENGE folder,
+      the input file should be <class.csv>"
+puts "\nEnter the CSV file path:"
 filename = gets.chomp
 
 # Run program if file path is valid
@@ -126,17 +128,17 @@ if File.exists?(filename) && File.readable?(filename) then
   # Create Array of Hashes from CSV
   class_array = csv_to_array(in_file)
 
-  pp "class_array: #{class_array}"
+  #pp "class_array: #{class_array}"
 
   # Sort by Student ID
   sorted_hasharr = sort_hasharr_by_student_id(class_array)
 
-  pp "sorted_hasharr: #{sorted_hasharr}"
+  #pp "sorted_hasharr: #{sorted_hasharr}"
 
   # Merge all info by student, calculate avg based on total of assignments
   # (assg_tot), assign letter grade for average
   merged_hasharr = merge_student_info(sorted_hasharr, 3)
-  pp "merged_hasharr: #{merged_hasharr}"
+  #pp "merged_hasharr: #{merged_hasharr}"
 
   # Print student names and letter grades
   final_printout(merged_hasharr)
