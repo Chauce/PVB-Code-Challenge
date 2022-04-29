@@ -39,11 +39,7 @@
 
 require 'csv'
 
-filename = ""
-in_file = nil
-class_array = []
-
-def lettergrade(total)
+def letter_grade(total)
   avg = (total / 3)
   puts "We got #{avg}"
   letter = case avg
@@ -63,15 +59,13 @@ def lettergrade(total)
   return letter
 end
 
-# Read in file from terminal
-puts "Chasya Church -- Student Grade Calculation"
-puts "Enter the CSV file path:"
-filename = gets.chomp
-if File.exists?(filename) && File.readable?(filename) then
-  in_file = File.open(filename, "r")
-
-  # Create Array of Hashes from CSV
-  CSV.parse(in_file, headers: false) do |row|
+# Create Array of Hashes from CSV
+def csv_to_array(csvfile)
+  filename = ""
+  in_file = nil
+  class_array = []
+  
+  CSV.parse(csvfile, headers: false) do |row|
     assg_hash = {
       name: row[0],
       id: row[1],
@@ -80,6 +74,18 @@ if File.exists?(filename) && File.readable?(filename) then
     }
     class_array << assg_hash
   end
+  return class_array
+end
+
+# Read in file from terminal
+puts "Chasya Church -- Student Grade Calculation"
+puts "Enter the CSV file path:"
+filename = gets.chomp
+if File.exists?(filename) && File.readable?(filename) then
+  in_file = File.open(filename, "r")
+
+  # Create Array of Hashes from CSV
+  class_array = csv_to_array(in_file)
 
   pp "class_array: #{class_array}"
 
@@ -91,7 +97,7 @@ if File.exists?(filename) && File.readable?(filename) then
   merged_hasharr = sorted_hasharr.each_with_object(Hash.new(0)) { |hsh, e| e[hsh[:name]] += hsh[:score].to_f }.
     sort_by { |_, v| -v }.
     map.
-    with_index { |(k, v), i| [{ :student => k, :total => v, :avg => (v/3), :letter => (lettergrade(v))}] }
+    with_index { |(k, v), i| [{ :student => k, :total => v, :avg => (v/3), :letter => (letter_grade(v))}] }
   pp "merged_hasharr: #{merged_hasharr}"
 
   else
