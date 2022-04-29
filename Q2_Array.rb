@@ -43,6 +43,26 @@ filename = ""
 in_file = nil
 class_array = []
 
+def lettergrade(total)
+  avg = (total / 3)
+  puts "We got #{avg}"
+  letter = case avg
+  when 90..100
+     'A'
+  when 80..90
+      'B'
+   when 70..80
+      'C'
+   when 55..70
+      'D'
+   when 0..55
+      'F'
+   else
+     pp 'Could not find score'
+  end
+  return letter
+end
+
 # Read in file from terminal
 puts "Chasya Church -- Student Grade Calculation"
 puts "Enter the CSV file path:"
@@ -89,16 +109,22 @@ if File.exists?(filename) && File.readable?(filename) then
   pp "sorted_hasharr: #{sorted_hasharr}"
 
   # Merge so your student data has total score
-  merged_hasharr = sorted_hasharr.
-    group_by { |h| h[:id] }.
-    values.
-    map { |arr| arr.
-      inject{|memo, el| memo.
-        merge( el ){|k, old_v, new_v| old_v + new_v}
-      }
-    }
+  # merged_hasharr = sorted_hasharr.
+  #   group_by { |h| h[:id] }.
+  #   values.
+  #   map { |arr| arr.
+  #     inject{|memo, el| memo.
+  #       merge( el ){|k, old_v, new_v| old_v + new_v}
+  #     }
+  #   }
 
+  merged_hasharr = sorted_hasharr.each_with_object(Hash.new(0)) { |hsh, e| e[hsh[:name]] += hsh[:score].to_f }.
+    sort_by { |_, v| -v }.
+    map.
+    with_index { |(k, v), i| [{ :student => k, :total => v, :avg => (v/3), :letter => (lettergrade(v))}] }
   pp "merged_hasharr: #{merged_hasharr}"
+
+  #pp "We got the letter grade: #{(lettergrade(300))}"
 
   # Create individual arrays for students, summing together scores
   #sum_arr = scores_arr.group_by(&:first).map {|name, score| [name, score.sum(&:last)] }
@@ -111,8 +137,8 @@ if File.exists?(filename) && File.readable?(filename) then
    # Push letter grade to new[4]
    # Push entire new student array to array of arrays
 
-
   else
     puts "#{filename} does not exist or is not readable."
 end
- puts "---Finished---"
+
+puts "---Finished---"
