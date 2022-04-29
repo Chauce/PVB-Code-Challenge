@@ -87,10 +87,31 @@ end
 # (assg_tot), assign letter grade for average
 def merge_student_info(sorted_hasharr)
   merged_hasharr = sorted_hasharr.each_with_object(Hash.new(0)) { |hsh, e| e[hsh[:name]] += hsh[:score].to_f }.
-    sort_by { |_, v| -v }.
+    #sort_by { |_, v| -v }.
     map.
     with_index { |(k, v), i| [{ :student => k, :total => v, :avg => (v/3), :letter => (letter_grade(v))}] }
   return merged_hasharr
+end
+
+# Print student names and letter grades
+def final_printout(complete_hasharr)
+  puts "Students' Letter Grades:"
+  complete_hasharr.each do |arr|
+    #pp "arr: #{arr}"
+    arr.each do |in_arr|
+      #pp "internal array: #{in_arr}"
+      in_arr.each do |key, val|
+        #pp "key is: #{key}"
+        #pp "value is: #{val}"
+        if key == :student
+          print "#{val} "
+        elsif key == :letter
+          print "#{val}"
+        end
+      end
+      print "\n"
+    end
+  end
 end
 
 # Read in file from terminal
@@ -118,27 +139,11 @@ if File.exists?(filename) && File.readable?(filename) then
   pp "merged_hasharr: #{merged_hasharr}"
 
   # Print student names and letter grades
-  puts "Students' Letter Grades:"
-  merged_hasharr.each do |arr|
-    #pp "arr: #{arr}"
-    arr.each do |in_arr|
-      #pp "internal array: #{in_arr}"
-      in_arr.each do |key, val|
-        #pp "key is: #{key}"
-        #pp "value is: #{val}"
-        if key == :student
-          print "#{val} "
-        elsif key == :letter
-          print "#{val}"
-        end
-      end
-      print "\n"
-    end
-  end
+  final_printout(merged_hasharr)
 
   # If file path is not valid, print message and quit
   else
     puts "#{filename} does not exist or is not readable."
 end
 
-puts "---Finished---"
+puts "\nProgram Complete -- GOODBYE! :)"
