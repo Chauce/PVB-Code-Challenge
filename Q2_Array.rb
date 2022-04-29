@@ -117,6 +117,25 @@ if File.exists?(filename) && File.readable?(filename) then
   merged_hasharr = merge_student_info(sorted_hasharr)
   pp "merged_hasharr: #{merged_hasharr}"
 
+  # Print student names and letter grades
+  puts "Students' Letter Grades:"
+  merged_hasharr.each do |arr|
+    #pp "arr: #{arr}"
+    arr.each do |in_arr|
+      #pp "internal array: #{in_arr}"
+      in_arr.each do |key, val|
+        #pp "key is: #{key}"
+        #pp "value is: #{val}"
+        if key == :student
+          print "#{val} "
+        elsif key == :letter
+          print "#{val}"
+        end
+      end
+      print "\n"
+    end
+  end
+
   # If file path is not valid, print message and quit
   else
     puts "#{filename} does not exist or is not readable."
