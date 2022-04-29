@@ -98,6 +98,7 @@ puts "Chasya Church -- Student Grade Calculation"
 puts "Enter the CSV file path:"
 filename = gets.chomp
 
+# Run program if file path is valid
 if File.exists?(filename) && File.readable?(filename) then
   in_file = File.open(filename, "r")
 
@@ -116,6 +117,7 @@ if File.exists?(filename) && File.readable?(filename) then
   merged_hasharr = merge_student_info(sorted_hasharr)
   pp "merged_hasharr: #{merged_hasharr}"
 
+  # If file path is not valid, print message and quit
   else
     puts "#{filename} does not exist or is not readable."
 end
