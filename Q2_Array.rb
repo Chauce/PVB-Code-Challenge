@@ -85,11 +85,11 @@ end
 
 # Merge all info by student, calculate avg based on total of assignments
 # (assg_tot), assign letter grade for average
-def merge_student_info(sorted_hasharr)
+def merge_student_info(sorted_hasharr, assg_tot)
   merged_hasharr = sorted_hasharr.each_with_object(Hash.new(0)) { |hsh, e| e[hsh[:name]] += hsh[:score].to_f }.
     #sort_by { |_, v| -v }.
     map.
-    with_index { |(k, v), i| [{ :student => k, :total => v, :avg => (v/3), :letter => (letter_grade(v))}] }
+    with_index { |(k, v), i| [{ :student => k, :total => v, :avg => (v/assg_tot), :letter => (letter_grade(v))}] }
   return merged_hasharr
 end
 
@@ -135,7 +135,7 @@ if File.exists?(filename) && File.readable?(filename) then
 
   # Merge all info by student, calculate avg based on total of assignments
   # (assg_tot), assign letter grade for average
-  merged_hasharr = merge_student_info(sorted_hasharr)
+  merged_hasharr = merge_student_info(sorted_hasharr, 3)
   pp "merged_hasharr: #{merged_hasharr}"
 
   # Print student names and letter grades
